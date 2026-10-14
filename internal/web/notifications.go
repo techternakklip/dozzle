@@ -33,6 +33,7 @@ type NotificationRuleResponse struct {
 	EventExpression     string              `json:"eventExpression,omitempty"`
 	Cooldown            int                 `json:"cooldown,omitempty"`
 	SampleWindow        int                 `json:"sampleWindow,omitempty"`
+	AISummary           bool                `json:"aiSummary,omitempty"`
 	TriggerCount        int64               `json:"triggerCount"`
 	TriggeredContainers int                 `json:"triggeredContainers"`
 	LastTriggeredAt     *time.Time          `json:"lastTriggeredAt"`
@@ -59,6 +60,7 @@ type NotificationRuleInput struct {
 	EventExpression     string `json:"eventExpression,omitempty"`
 	Cooldown            int    `json:"cooldown,omitempty"`
 	SampleWindow        int    `json:"sampleWindow,omitempty"`
+	AISummary           bool   `json:"aiSummary,omitempty"`
 }
 
 type NotificationRuleUpdateInput struct {
@@ -71,6 +73,7 @@ type NotificationRuleUpdateInput struct {
 	EventExpression     *string `json:"eventExpression,omitempty"`
 	Cooldown            *int    `json:"cooldown,omitempty"`
 	SampleWindow        *int    `json:"sampleWindow,omitempty"`
+	AISummary           *bool   `json:"aiSummary,omitempty"`
 }
 
 type DispatcherInput struct {
@@ -195,6 +198,7 @@ func subscriptionToResponse(sub *notification.Subscription, dispatchers []notifi
 		EventExpression:     sub.EventExpression,
 		Cooldown:            sub.Cooldown,
 		SampleWindow:        sub.SampleWindow,
+		AISummary:           sub.AISummary,
 		TriggerCount:        triggerCount,
 		LastTriggeredAt:     lastTriggeredAt,
 		TriggeredContainers: triggeredContainers,
@@ -290,6 +294,7 @@ func (h *handler) createNotificationRule(w http.ResponseWriter, r *http.Request)
 		EventExpression:     input.EventExpression,
 		Cooldown:            input.Cooldown,
 		SampleWindow:        input.SampleWindow,
+		AISummary:           input.AISummary,
 	}
 
 	if err := h.hostService.AddSubscription(sub); err != nil {
@@ -325,6 +330,7 @@ func (h *handler) replaceNotificationRule(w http.ResponseWriter, r *http.Request
 		EventExpression:     input.EventExpression,
 		Cooldown:            input.Cooldown,
 		SampleWindow:        input.SampleWindow,
+		AISummary:           input.AISummary,
 	}
 
 	if err := h.hostService.ReplaceSubscription(sub); err != nil {
@@ -376,6 +382,9 @@ func (h *handler) updateNotificationRule(w http.ResponseWriter, r *http.Request)
 	}
 	if input.SampleWindow != nil {
 		updates["sampleWindow"] = *input.SampleWindow
+	}
+	if input.AISummary != nil {
+		updates["aiSummary"] = *input.AISummary
 	}
 
 	if err := h.hostService.UpdateSubscription(id, updates); err != nil {

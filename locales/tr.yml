@@ -540,6 +540,8 @@ notifications:
     log-scan-note: "Önizleme, eşleşen ilk konteyneri taradı. | Önizleme, eşleşen ilk {count} konteyneri taradı."
     preview-needs-containers: Gerçek veriyle önizleme için önce konteynerleri seçin.
     preview-fix-expression: Önizleme görmek için ifadeyi düzeltin.
+    ai-summary: Yapay zeka ile açıkla
+    ai-summary-hint: Eşleşmeleri konteyner başına tek bir uyarıda toplar, en fazla 5 dakikada bir gönderir ve olası nedeni en üste yazar. Eşleşen satırlar ile çevresindeki satırlardaki hassas veriler, yapay zeka sağlayıcısına gönderilmeden önce gizlenir.
     destination: Hedef
     no-destinations: Henüz hedef yapılandırılmadı.
     preview: Önizleme

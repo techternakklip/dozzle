@@ -8,6 +8,7 @@ export interface NotificationRule {
   eventExpression?: string;
   cooldown?: number;
   sampleWindow?: number;
+  aiSummary?: boolean;
   triggerCount: number;
   triggeredContainers: number;
   lastTriggeredAt: string | null;
@@ -35,6 +36,7 @@ export interface NotificationRuleInput {
   eventExpression?: string;
   cooldown?: number;
   sampleWindow?: number;
+  aiSummary?: boolean;
 }
 
 export interface PreviewResult {

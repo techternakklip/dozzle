@@ -539,6 +539,8 @@ notifications:
     log-scan-note: "미리보기는 일치하는 첫 컨테이너를 검사했습니다. | 미리보기는 일치하는 컨테이너 중 처음 {count}개를 검사했습니다."
     preview-needs-containers: 실제 데이터로 미리 보려면 먼저 컨테이너를 선택하세요.
     preview-fix-expression: 미리보기를 보려면 표현식을 수정하세요.
+    ai-summary: AI로 설명
+    ai-summary-hint: 일치 항목을 컨테이너당 하나의 알림으로 묶어 최대 5분마다 보내고, 가능성 높은 원인을 맨 위에 표시합니다. 일치한 줄과 그 주변 줄의 민감한 정보는 가린 뒤 AI 제공자에게 전송됩니다.
     destination: 목적지
     no-destinations: 아직 구성된 대상이 없습니다.
     preview: 미리보기

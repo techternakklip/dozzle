@@ -43,6 +43,16 @@
       <template v-if="truncated">{{ $t("notifications.alert-form.log-scan-note", scannedContainers) }}</template>
     </p>
   </div>
+
+  <label v-if="config.aiEnabled" class="mt-2 flex items-start justify-between gap-3">
+    <span class="min-w-0">
+      <span class="block text-sm font-medium">{{ $t("notifications.alert-form.ai-summary") }}</span>
+      <span class="text-base-content/60 mt-0.5 block text-xs">{{
+        $t("notifications.alert-form.ai-summary-hint")
+      }}</span>
+    </span>
+    <input v-model="aiSummary" type="checkbox" class="toggle toggle-primary toggle-sm mt-0.5 shrink-0" />
+  </label>
 </template>
 
 <script lang="ts" setup>
@@ -53,7 +63,7 @@ import type { NotificationRule, PreviewResult } from "@/types/notifications";
 
 const props = defineProps<{
   alert?: NotificationRule;
-  prefill?: { logExpression?: string };
+  prefill?: { logExpression?: string; aiSummary?: boolean };
   containerExpression: string;
   hasContainers: boolean;
   isLoading: boolean;
@@ -63,6 +73,9 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const logExpression = ref(props.alert?.logExpression ?? props.prefill?.logExpression ?? "");
+// Sent even while the toggle is hidden, so editing a rule on an instance without
+// an AI key doesn't switch it off.
+const aiSummary = ref(props.alert?.aiSummary ?? props.prefill?.aiSummary ?? false);
 const logError = ref<string | null>(null);
 const logTotalCount = ref(0);
 const logMessages = shallowRef<LogEntry<LogMessage>[]>([]);
@@ -77,7 +90,12 @@ const getHints = () => createLogHints(messageKeys.value);
 // An empty expression is not "match everything" — the backend treats a rule without a log
 // expression as inert — so it is a required field, not an optional filter.
 const canSave = computed(() => !!logExpression.value.trim() && !logError.value);
-const typeFields = computed(() => ({ logExpression: logExpression.value, metricExpression: "", cooldown: 0 }));
+const typeFields = computed(() => ({
+  logExpression: logExpression.value,
+  metricExpression: "",
+  cooldown: 0,
+  aiSummary: aiSummary.value,
+}));
 
 defineExpose({ canSave, typeFields });
 

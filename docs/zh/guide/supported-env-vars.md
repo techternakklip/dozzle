@@ -1,6 +1,6 @@
 ---
 title: 环境变量与子命令
-sourceHash: d85601289c22
+sourceHash: 97dc5b1800ac
 ---
 
 # 环境变量
@@ -52,6 +52,19 @@ DOZZLE_REMOTE_AGENT=167.99.1.1:7007,167.99.1.2:7007
 | `DOZZLE_AUTO_UPDATE`<br>`--auto-update`                   | 按计划更新 Dozzle，以及设为自动更新的容器。`weekly` 在周日运行。需要开启 `DOZZLE_ENABLE_ACTIONS`。请参阅[自动更新容器](/zh/guide/updates#auto-updating-containers)。      | `off`、`daily`、`weekly`     | `off`                               |
 | `DOZZLE_AUTO_UPDATE_TIME`<br>`--auto-update-time`         | 每天运行自动更新的时间，按服务器本地时间计算。实际会在该时间后随机延迟 1–10 分钟开始，避开整点。                                                                          | `HH:MM`，例如 `04:30`        | `03:00`                             |
 | `DOZZLE_UPDATE_CONTAINERS`<br>`--update-containers`       | 自动更新除 Dozzle 之外还更新哪些容器：`off` 只更新 Dozzle，`labelled` 更新带有 `dev.dozzle.update=auto` 标签的容器，`all` 更新所有未标记 `dev.dozzle.update=off` 的容器。 | `off`、`labelled`、`all`     | `labelled`                          |
+
+## AI 解释 {#ai-explanations}
+
+让日志警报可以[解释它捕获的错误](/zh/guide/alerts-and-webhooks#explain-with-ai)。设置任一密钥即可开启；两个都设置时，先询问 Claude。
+
+| 变量                                                        | 说明                                                        | 取值      | 默认值                      |
+| ----------------------------------------------------------- | ----------------------------------------------------------- | --------- | --------------------------- |
+| `DOZZLE_AI_CLAUDE_API_KEY`<br>`--ai-claude-api-key`         | 来自 Claude Console 的 API 密钥，费用从其额度中扣除。       | 字符串    | 无                          |
+| `DOZZLE_AI_CLAUDE_MODEL`<br>`--ai-claude-model`             | 用来解释警报的 Claude 模型。                                | 模型 ID   | `claude-opus-5-5`           |
+| `DOZZLE_AI_OPENROUTER_API_KEY`<br>`--ai-openrouter-api-key` | OpenRouter API 密钥，在 Claude 失败时使用，也可以单独使用。 | 字符串    | 无                          |
+| `DOZZLE_AI_OPENROUTER_MODEL`<br>`--ai-openrouter-model`     | 用来解释警报的 OpenRouter 模型。                            | 模型 slug | `anthropic/claude-opus-5.5` |
+
+两个密钥都还接受一个 `_FILE` 形式的对应变量，用来指明从哪个文件读取密钥，方便配合 Docker secrets 使用。
 
 ## 身份验证
 

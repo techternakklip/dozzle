@@ -1,6 +1,6 @@
 ---
 title: Umgebungsvariablen und Unterbefehle
-sourceHash: d85601289c22
+sourceHash: 97dc5b1800ac
 ---
 
 # Umgebungsvariablen
@@ -52,6 +52,19 @@ DOZZLE_REMOTE_AGENT=167.99.1.1:7007,167.99.1.2:7007
 | `DOZZLE_AUTO_UPDATE`<br>`--auto-update`                   | Aktualisiert Dozzle und die Container, die automatisch aktualisiert werden sollen, nach Zeitplan. `weekly` läuft am Sonntag. Setzt `DOZZLE_ENABLE_ACTIONS` voraus. Siehe [Container automatisch aktualisieren](/de/guide/updates#auto-updating-containers). | `off`, `daily`, `weekly`     | `off`                           |
 | `DOZZLE_AUTO_UPDATE_TIME`<br>`--auto-update-time`         | Uhrzeit, zu der das automatische Update läuft, in der lokalen Zeit des Servers. Es startet zufällig 1–10 Minuten später, nicht zur vollen Stunde.                                                                                                           | `HH:MM`, z. B. `04:30`       | `03:00`                         |
 | `DOZZLE_UPDATE_CONTAINERS`<br>`--update-containers`       | Welche Container das automatische Update neben Dozzle aktualisiert: `off` nur Dozzle, `labelled` die mit `dev.dozzle.update=auto` markierten, `all` jeden Container ohne `dev.dozzle.update=off`.                                                           | `off`, `labelled`, `all`     | `labelled`                      |
+
+## KI-Erklärungen {#ai-explanations}
+
+Lässt Log-Alarme [ihre Fehler erklären](/de/guide/alerts-and-webhooks#explain-with-ai). Jeder der beiden Schlüssel schaltet das ein, und mit beiden wird zuerst Claude gefragt.
+
+| Variable                                                    | Beschreibung                                                           | Werte           | Standard                    |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------- | --------------- | --------------------------- |
+| `DOZZLE_AI_CLAUDE_API_KEY`<br>`--ai-claude-api-key`         | API-Schlüssel aus der Claude Console, abgerechnet über deren Guthaben. | ein String      | keiner                      |
+| `DOZZLE_AI_CLAUDE_MODEL`<br>`--ai-claude-model`             | Claude-Modell, das Alarme erklärt.                                     | eine Modell-ID  | `claude-opus-5-5`           |
+| `DOZZLE_AI_OPENROUTER_API_KEY`<br>`--ai-openrouter-api-key` | OpenRouter-API-Schlüssel, genutzt wenn Claude scheitert oder allein.   | ein String      | keiner                      |
+| `DOZZLE_AI_OPENROUTER_MODEL`<br>`--ai-openrouter-model`     | OpenRouter-Modell, das Alarme erklärt.                                 | ein Modell-Slug | `anthropic/claude-opus-5.5` |
+
+Beide Schlüssel akzeptieren auch ein Gegenstück mit `_FILE`, das eine Datei benennt, aus der der Schlüssel gelesen wird, zur Nutzung mit Docker Secrets.
 
 ## Authentifizierung
 

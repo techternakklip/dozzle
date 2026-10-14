@@ -19,6 +19,8 @@ export interface Config {
   enableShell: boolean;
   enableDownload: boolean;
   enableNotifications: boolean;
+  // An AI key is set, so log alerts can ask to be explained.
+  aiEnabled?: boolean;
   enableCloud: boolean;
   canLinkCloud: boolean;
   dataPersisted?: boolean;

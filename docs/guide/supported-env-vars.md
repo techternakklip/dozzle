@@ -52,6 +52,19 @@ DOZZLE_REMOTE_AGENT=167.99.1.1:7007,167.99.1.2:7007
 | `DOZZLE_AUTO_UPDATE_TIME`<br>`--auto-update-time`         | Time of day the auto update runs, in the server's local time. It starts a random 1–10 minutes later, off the hour.                                                                                                 | `HH:MM`, e.g. `04:30`        | `03:00`                             |
 | `DOZZLE_UPDATE_CONTAINERS`<br>`--update-containers`       | Which containers the auto update updates besides Dozzle: `off` is Dozzle only, `labelled` is the ones labelled `dev.dozzle.update=auto`, `all` is every container not labelled `dev.dozzle.update=off`.            | `off`, `labelled`, `all`     | `labelled`                          |
 
+## AI Explanations
+
+Lets log alerts [explain their errors](/guide/alerts-and-webhooks#explain-with-ai). Either key turns it on, and with both, Claude is asked first.
+
+| Variable                                                    | Description                                               | Values       | Default                     |
+| ----------------------------------------------------------- | --------------------------------------------------------- | ------------ | --------------------------- |
+| `DOZZLE_AI_CLAUDE_API_KEY`<br>`--ai-claude-api-key`         | API key from the Claude Console, billed to its credits.   | a string     | none                        |
+| `DOZZLE_AI_CLAUDE_MODEL`<br>`--ai-claude-model`             | Claude model that explains alerts.                        | a model id   | `claude-opus-5-5`           |
+| `DOZZLE_AI_OPENROUTER_API_KEY`<br>`--ai-openrouter-api-key` | OpenRouter API key, used when Claude fails or on its own. | a string     | none                        |
+| `DOZZLE_AI_OPENROUTER_MODEL`<br>`--ai-openrouter-model`     | OpenRouter model that explains alerts.                    | a model slug | `anthropic/claude-opus-5.5` |
+
+Both keys also accept a `_FILE` counterpart naming a file to read the key from, for use with Docker secrets.
+
 ## Authentication
 
 See [authentication](/guide/authentication) for how the providers work.

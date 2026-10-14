@@ -537,6 +537,8 @@ notifications:
     log-scan-note: "L'anteprima ha esaminato il primo container corrispondente. | L'anteprima ha esaminato i primi {count} container corrispondenti."
     preview-needs-containers: Scegli prima i container per vedere un'anteprima con dati reali.
     preview-fix-expression: Correggi l'espressione per vedere un'anteprima.
+    ai-summary: Spiega con l'AI
+    ai-summary-hint: Raggruppa le corrispondenze in un solo avviso per container, al massimo ogni 5 minuti, con la causa probabile in cima. I dati sensibili delle righe corrispondenti e di quelle vicine vengono oscurati prima dell'invio al provider AI.
     destination: Destinazione
     no-destinations: Nessuna destinazione configurata finora.
     preview: Anteprima

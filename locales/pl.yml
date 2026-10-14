@@ -539,6 +539,8 @@ notifications:
     log-scan-note: "Podgląd przeszukał pierwszy pasujący kontener. | Podgląd przeszukał pierwsze {count} pasujących kontenerów."
     preview-needs-containers: Najpierw wybierz kontenery, aby zobaczyć podgląd na prawdziwych danych.
     preview-fix-expression: Popraw wyrażenie, aby zobaczyć podgląd.
+    ai-summary: Wyjaśnij za pomocą AI
+    ai-summary-hint: Łączy dopasowania w jeden alert na kontener, najwyżej co 5 minut, z prawdopodobną przyczyną na górze. Dane wrażliwe w dopasowanych liniach i liniach wokół nich są maskowane przed wysłaniem do dostawcy AI.
     destination: Miejsce docelowe
     no-destinations: Nie skonfigurowano jeszcze żadnych celów.
     preview: Podgląd

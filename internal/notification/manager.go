@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -30,6 +31,14 @@ type Manager struct {
 	ctx                 context.Context
 	cancel              context.CancelFunc
 	sendSem             *semaphore.Weighted
+
+	// AI explanations, nil when off. Groups are keyed by rule and container
+	// rather than kept on Subscription, whose pointer every edit replaces.
+	explainer Explainer
+	aiMu      sync.Mutex
+	aiGroups  map[aiGroupKey]*aiBatch
+	aiSettle  time.Duration // how long a burst is collected before it is sent
+	aiQuiet   time.Duration // the least time between two notifications of one group
 }
 
 // NewManager creates a new notification manager
@@ -44,6 +53,9 @@ func NewManager(listener *ContainerLogListener, statsListener *ContainerStatsLis
 		ctx:           ctx,
 		cancel:        cancel,
 		sendSem:       semaphore.NewWeighted(5),
+		aiGroups:      make(map[aiGroupKey]*aiBatch),
+		aiSettle:      10 * time.Second,
+		aiQuiet:       5 * time.Minute,
 	}
 
 	// Start processing log events from the listener
@@ -161,6 +173,7 @@ func (m *Manager) UpdateSubscription(id int, updates map[string]any) error {
 			EventCooldowns:        sub.EventCooldowns,
 			Cooldown:              sub.Cooldown,
 			SampleWindow:          sub.SampleWindow,
+			AISummary:             sub.AISummary,
 			MetricCooldowns:       sub.MetricCooldowns,
 			MetricSampleBuffers:   sub.MetricSampleBuffers,
 			TriggeredContainerIDs: sub.TriggeredContainerIDs,
@@ -248,6 +261,10 @@ func (m *Manager) UpdateSubscription(id int, updates map[string]any) error {
 				if sw, ok := value.(int); ok {
 					updated.SampleWindow = sw
 					updated.MetricSampleBuffers = xsync.NewMap[string, *utils.RingBuffer[bool]]()
+				}
+			case "aiSummary":
+				if v, ok := value.(bool); ok {
+					updated.AISummary = v
 				}
 			}
 		}

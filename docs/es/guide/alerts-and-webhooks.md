@@ -1,6 +1,6 @@
 ---
 title: Alertas
-sourceHash: 5e7e00f70c1f
+sourceHash: c346dd092670
 ---
 
 # Alertas
@@ -186,6 +186,18 @@ Log:       message matches "(?i)(unauthorized|forbidden|invalid token)"
 
 > [!NOTE]
 > El editor de alertas incluye autocompletado y validación en tiempo real. Puedes previsualizar los contenedores y logs que coinciden antes de guardar.
+
+### Explicar con IA {#explain-with-ai}
+
+Con una clave de IA configurada (consulta las [variables de entorno](/es/guide/supported-env-vars#ai-explanations)), una alerta de log puede explicar sus errores. Marca **Explicar con IA** en la regla.
+
+- Las coincidencias se reúnen durante 10 segundos y se envían como una sola notificación por contenedor, como mucho cada 5 minutos. Las que llegan durante esa espera salen con la siguiente, así que no se pierde ninguna.
+- `.Detail` empieza con la causa probable y qué revisar, y luego indica cuántas líneas coincidieron y cita las tres más frecuentes. Las plantillas de Slack, Discord y ntfy lo muestran sin cambios.
+- El modelo lee las líneas coincidentes y hasta 20 líneas antes y 10 después de la primera coincidencia, 8 KB como máximo. Los secretos, las query strings de las URL, los correos, los números largos y los valores SQL se ocultan antes, y la copia para el modelo también oculta los identificadores y las direcciones IP. El enmascarado solo conoce estos patrones, así que revisa lo que se envía con `--level debug` antes de activarlo para los logs de producción.
+- Primero se consulta a Claude y luego a OpenRouter si Claude falla. Si el modelo no encuentra una causa, o si fallan los dos, la alerta sale sin explicación.
+- El mismo error de la misma imagen en un plazo de 6 horas reutiliza la explicación anterior, y como mucho se generan 60 explicaciones por hora. Cada llamada al modelo registra su recuento de tokens.
+
+Las alertas de los [agentes](/es/guide/agent) y del [modo Swarm](/es/guide/swarm-mode) no se explican, ni tampoco las reglas que se envían a Dozzle Cloud. Se envían como antes.
 
 ## <Icon icon="mdi:chart-line" inline /> Alertas de métrica
 

@@ -272,13 +272,15 @@ func (m *K8sClusterService) ClientServices(_ bool) []container.ClientService {
 	return m.LocalClientServices()
 }
 
-// StartNotificationManager initializes and starts the notification manager for k8s mode
-func (m *K8sClusterService) StartNotificationManager(ctx context.Context) error {
+// StartNotificationManager initializes and starts the notification manager for
+// k8s mode. explainer is nil when AI explanations are off.
+func (m *K8sClusterService) StartNotificationManager(ctx context.Context, explainer notification.Explainer) error {
 	clients := m.LocalClientServices()
 	listener := notification.NewContainerLogListener(ctx, clients)
 	statsListener := notification.NewContainerStatsListener(ctx, clients)
 	eventListener := notification.NewContainerEventListener(ctx, clients)
 	m.notificationManager = notification.NewManager(listener, statsListener, eventListener)
+	m.notificationManager.SetExplainer(explainer)
 	m.persister = &notification.Persister{
 		Manager:          m.notificationManager,
 		NotificationPath: notification.DefaultNotificationConfigPath,

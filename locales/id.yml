@@ -549,6 +549,8 @@ notifications:
     log-scan-note: "Pratinjau memindai kontainer cocok pertama. | Pratinjau memindai {count} kontainer cocok pertama."
     preview-needs-containers: Pilih kontainer dulu untuk melihat pratinjau dengan data nyata.
     preview-fix-expression: Perbaiki ekspresi untuk melihat pratinjau.
+    ai-summary: Jelaskan dengan AI
+    ai-summary-hint: Menggabungkan kecocokan menjadi satu peringatan per kontainer, paling sering setiap 5 menit, dengan kemungkinan penyebab di bagian atas. Data sensitif pada baris yang cocok dan baris di sekitarnya disamarkan sebelum dikirim ke penyedia AI.
     destination: Tujuan
     no-destinations: Belum ada tujuan yang dikonfigurasi.
     preview: Pratinjau

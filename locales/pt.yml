@@ -537,6 +537,8 @@ notifications:
     log-scan-note: "A pré-visualização percorreu o primeiro contêiner correspondente. | A pré-visualização percorreu os primeiros {count} contêineres correspondentes."
     preview-needs-containers: Escolha contêineres primeiro para pré-visualizar com dados reais.
     preview-fix-expression: Corrija a expressão para ver uma pré-visualização.
+    ai-summary: Explicar com IA
+    ai-summary-hint: Agrupa as correspondências em um único alerta por container, no máximo a cada 5 minutos, com a causa provável no topo. Os dados sensíveis das linhas correspondentes e das linhas ao redor são ocultados antes do envio ao provedor de IA.
     destination: Destino
     no-destinations: Nenhum destino configurado ainda.
     preview: Prévia

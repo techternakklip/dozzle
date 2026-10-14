@@ -20,3 +20,10 @@ tmp
 e2e/data/session_secret
 .user-ref-secret
 /public/duckdb-extensions/
+# Local notes and plans at the repo root. The project's own root .md files stay tracked.
+/*.md
+!/CLAUDE.md
+!/CODE_OF_CONDUCT.md
+!/MAJOR_VERSIONS.md
+!/README.md
+!/SECURITY.md

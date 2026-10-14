@@ -661,6 +661,8 @@ notifications:
     log-scan-note: "La vista previa revisó el primer contenedor coincidente. | La vista previa revisó los primeros {count} contenedores coincidentes."
     preview-needs-containers: Elige contenedores primero para ver una vista previa con datos reales.
     preview-fix-expression: Corrige la expresión para ver una vista previa.
+    ai-summary: Explicar con IA
+    ai-summary-hint: Agrupa las coincidencias en una sola alerta por contenedor, como mucho cada 5 minutos, con la causa probable al principio. Los datos sensibles de las líneas coincidentes y de las de alrededor se ocultan antes de enviarlas al proveedor de IA.
     destination: Destino
     no-destinations: Todavía no hay destinos configurados.
     preview: Vista previa

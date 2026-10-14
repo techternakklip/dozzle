@@ -537,6 +537,8 @@ notifications:
     log-scan-note: "Die Vorschau hat den ersten passenden Container durchsucht. | Die Vorschau hat die ersten {count} passenden Container durchsucht."
     preview-needs-containers: Wählen Sie zuerst Container aus, um eine Vorschau mit echten Daten zu sehen.
     preview-fix-expression: Korrigieren Sie den Ausdruck, um eine Vorschau zu sehen.
+    ai-summary: Mit KI erklären
+    ai-summary-hint: Fasst Treffer zu einem Alarm pro Container zusammen, höchstens alle 5 Minuten, mit der wahrscheinlichen Ursache oben. Sensible Daten in den passenden Zeilen und den Zeilen darum herum werden unkenntlich gemacht, bevor sie an den KI-Anbieter gehen.
     destination: Ziel
     no-destinations: Noch keine Ziele konfiguriert.
     preview: Vorschau

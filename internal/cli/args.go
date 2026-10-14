@@ -44,6 +44,10 @@ type Args struct {
 	AutoUpdateTime         string              `arg:"--auto-update-time,env:DOZZLE_AUTO_UPDATE_TIME" default:"" help:"sets the HH:MM, in server local time, that --auto-update runs at. Defaults to 03:00."`
 	UpdateContainers       string              `arg:"--update-containers,env:DOZZLE_UPDATE_CONTAINERS" default:"" help:"sets which containers --auto-update updates besides Dozzle: off (Dozzle only), labelled (dev.dozzle.update=auto) or all (everything not labelled dev.dozzle.update=off). Defaults to labelled."`
 	EnableMCP              bool                `arg:"--enable-mcp,env:DOZZLE_ENABLE_MCP" default:"false" help:"enables the MCP (Model Context Protocol) endpoint for LLM integration."`
+	AIClaudeAPIKey         string              `arg:"--ai-claude-api-key,env:DOZZLE_AI_CLAUDE_API_KEY" help:"sets a Claude Console API key, which lets log alerts that ask for it explain their errors with AI."`
+	AIClaudeModel          string              `arg:"--ai-claude-model,env:DOZZLE_AI_CLAUDE_MODEL" default:"claude-opus-5-5" help:"sets the Claude model that explains alerts."`
+	AIOpenRouterAPIKey     string              `arg:"--ai-openrouter-api-key,env:DOZZLE_AI_OPENROUTER_API_KEY" help:"sets an OpenRouter API key, used when Claude fails or on its own."`
+	AIOpenRouterModel      string              `arg:"--ai-openrouter-model,env:DOZZLE_AI_OPENROUTER_MODEL" default:"anthropic/claude-opus-5.5" help:"sets the OpenRouter model that explains alerts."`
 	DisableAvatars         bool                `arg:"--disable-avatars,env:DOZZLE_DISABLE_AVATARS" default:"false" help:"disables avatars for authenticated users."`
 	DisableSetupWizard     bool                `arg:"--disable-setup-wizard,env:DOZZLE_DISABLE_SETUP_WIZARD" default:"false" help:"stops the setup wizard from opening by itself on a fresh install."`
 	FilterStrings          []string            `arg:"env:DOZZLE_FILTER,--filter,separate" help:"filters docker containers using Docker syntax."`

@@ -58,6 +58,7 @@ func (m *Manager) LoadConfig(r io.Reader) error {
 			EventExpression:     sub.EventExpression,
 			Cooldown:            sub.Cooldown,
 			SampleWindow:        sub.SampleWindow,
+			AISummary:           sub.AISummary,
 		}
 	}
 
@@ -128,6 +129,7 @@ func (m *Manager) HandleNotificationConfig(subscriptions []types.SubscriptionCon
 			EventExpression:     sub.EventExpression,
 			Cooldown:            sub.Cooldown,
 			SampleWindow:        sub.SampleWindow,
+			AISummary:           sub.AISummary,
 		}
 
 		if old, ok := existing[sub.ID]; ok {

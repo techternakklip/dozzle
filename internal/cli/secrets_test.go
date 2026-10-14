@@ -102,6 +102,8 @@ func TestFileBackedEnvNamesCoverEverySecret(t *testing.T) {
 	require.ElementsMatch(t, []string{
 		"DOZZLE_AUTH_GITHUB_CLIENT_SECRET",
 		"DOZZLE_AUTH_OIDC_CLIENT_SECRET",
+		"DOZZLE_AI_CLAUDE_API_KEY",
+		"DOZZLE_AI_OPENROUTER_API_KEY",
 	}, names)
 
 	// Every name must correspond to a real arg field.

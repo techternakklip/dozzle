@@ -537,6 +537,8 @@ notifications:
     log-scan-note: "Forhåndsvisningen gennemgik den første matchende container. | Forhåndsvisningen gennemgik de første {count} matchende containere."
     preview-needs-containers: Vælg containere først for at se en forhåndsvisning med rigtige data.
     preview-fix-expression: Ret udtrykket for at se en forhåndsvisning.
+    ai-summary: Forklar med AI
+    ai-summary-hint: Samler match i én alarm pr. container, højst hvert 5. minut, med den sandsynlige årsag øverst. Følsomme data i de matchende linjer og linjerne omkring dem maskeres, før de sendes til AI-udbyderen.
     destination: Destination
     no-destinations: Ingen destinationer konfigureret endnu.
     preview: Forhåndsvisning
