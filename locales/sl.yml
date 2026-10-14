@@ -542,6 +542,8 @@ notifications:
     log-scan-note: "Predogled je pregledal prvi ustrezni vsebnik. | Predogled je pregledal prvih {count} ustreznih vsebnikov."
     preview-needs-containers: Najprej izberite vsebnike za predogled z resničnimi podatki.
     preview-fix-expression: Popravite izraz, da vidite predogled.
+    ai-summary: Razloži z umetno inteligenco
+    ai-summary-hint: Združi ujemanja v eno opozorilo na zabojnik, največ vsakih 5 minut, z verjetnim vzrokom na vrhu. Občutljivi podatki v ujemajočih se vrsticah in vrsticah okoli njih so zakriti, preden se pošljejo ponudniku umetne inteligence.
     destination: Cilj
     no-destinations: Ciljev še ni nastavljenih.
     preview: Predogled

@@ -1,6 +1,6 @@
 ---
 title: 警报
-sourceHash: 5e7e00f70c1f
+sourceHash: c346dd092670
 ---
 
 # 警报
@@ -186,6 +186,18 @@ Log:       message matches "(?i)(unauthorized|forbidden|invalid token)"
 
 > [!NOTE]
 > 警报编辑器带有自动补全和实时校验。保存前你可以预览匹配到的容器和日志。
+
+### 用 AI 解释 {#explain-with-ai}
+
+设置了 AI 密钥后（参见[环境变量](/zh/guide/supported-env-vars#ai-explanations)），日志警报可以解释它捕获的错误。在规则上勾选 **用 AI 解释** 即可。
+
+- 匹配会先收集 10 秒，然后每个容器合并成一条通知发送，最多每 5 分钟一条。等待期间到达的匹配会随下一条一起发送，不会丢失。
+- `.Detail` 开头是可能的原因和应该检查的地方，接着说明匹配了多少行，并引用出现最多的三行。Slack、Discord 和 ntfy 模板无需修改即可显示。
+- 模型读取匹配的行，以及第一次匹配之前最多 20 行、之后最多 10 行，总共不超过 8 KB。密钥、URL 查询字符串、邮箱、长数字和 SQL 值会先被遮盖，发给模型的副本还会遮盖 ID 和 IP 地址。遮盖只认得这些模式，所以在对生产日志开启之前，请先用 `--level debug` 查看实际发送的内容。
+- 先询问 Claude，Claude 失败时再询问 OpenRouter。如果模型看不出原因，或者两者都失败，警报会不带解释照常发送。
+- 同一镜像在 6 小时内出现的同一个错误会复用之前的解释，每小时最多生成 60 条解释。每次调用模型都会记录其 token 数。
+
+来自[代理](/zh/guide/agent)和 [Swarm 模式](/zh/guide/swarm-mode)的警报不会被解释，发送到 Dozzle Cloud 的规则也一样。它们会像以前一样发送。
 
 ## <Icon icon="mdi:chart-line" inline /> 指标警报
 

@@ -214,6 +214,7 @@ func (h *handler) executeTemplate(w http.ResponseWriter, req *http.Request) {
 		config["enableActions"] = h.config.EnableActions
 		config["enableDownload"] = true
 		config["enableNotifications"] = true
+		config["aiEnabled"] = h.config.AIEnabled
 		config["enableCloud"] = true
 		config["canLinkCloud"] = true
 		// Runtime, not baked into the bundle, so pointing a dev instance at a

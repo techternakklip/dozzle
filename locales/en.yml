@@ -669,6 +669,8 @@ notifications:
     log-scan-note: "Preview scanned the first matching container. | Preview scanned the first {count} matching containers."
     preview-needs-containers: Pick containers first to preview against real data.
     preview-fix-expression: Fix the expression to see a preview.
+    ai-summary: Explain with AI
+    ai-summary-hint: Groups matches into one alert per container, at most every 5 minutes, with the likely cause on top. The matched lines and the lines around them are redacted, then sent to the AI provider.
     destination: Destination
     no-destinations: No destinations configured yet.
     preview: Preview

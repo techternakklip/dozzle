@@ -186,6 +186,18 @@ Log:       message matches "(?i)(unauthorized|forbidden|invalid token)"
 > [!NOTE]
 > The alert editor includes autocomplete and real-time validation. You can preview matched containers and logs before saving.
 
+### Explain with AI
+
+With an AI key set (see [environment variables](/guide/supported-env-vars#ai-explanations)), a log alert can explain its errors. Tick **Explain with AI** on the rule.
+
+- Matches are collected for 10 seconds and sent as one notification per container, at most every 5 minutes. Matches that arrive while it waits go out with the next one, so none are lost.
+- `.Detail` starts with the likely cause and what to check, then says how many lines matched and quotes the three most frequent. Slack, Discord and ntfy templates show it unchanged.
+- The model reads the matched lines and up to 20 lines before and 10 after the first match, 8 KB at most. Secrets, URL query strings, emails, long numbers and SQL values are masked first, and the model's copy also masks ids and IP addresses. Masking only knows these patterns, so read what is sent with `--level debug` before ticking it for production logs.
+- Claude is asked first, then OpenRouter if Claude fails. When the model can't tell, or both fail, the alert goes out without an explanation.
+- The same error from the same image within 6 hours reuses the earlier explanation, and at most 60 explanations are made per hour. Each model call logs its token counts.
+
+Alerts from [agents](/guide/agent) and in [swarm mode](/guide/swarm-mode) are not explained, and neither are rules sent to Dozzle Cloud. They are sent as before.
+
 ## <Icon icon="mdi:chart-line" inline /> Metric Alerts
 
 Metric alerts fire when a container's CPU or memory usage crosses a threshold. The trigger expression is evaluated against a smoothed average of stats sampled over a rolling window, which avoids false alarms from short spikes.

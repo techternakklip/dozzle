@@ -20,6 +20,7 @@ import (
 	_ "time/tzdata"
 
 	dozzlecerts "github.com/amir20/dozzle/internal/agentcerts"
+	"github.com/amir20/dozzle/internal/ai"
 	"github.com/amir20/dozzle/internal/analytics"
 	"github.com/amir20/dozzle/internal/auth"
 	"github.com/amir20/dozzle/internal/cli"
@@ -31,6 +32,7 @@ import (
 	"github.com/amir20/dozzle/internal/container/k8s"
 	"github.com/amir20/dozzle/internal/hostservice"
 	"github.com/amir20/dozzle/internal/imagecheck"
+	"github.com/amir20/dozzle/internal/notification"
 	"github.com/amir20/dozzle/internal/notification/dispatcher"
 	"github.com/amir20/dozzle/internal/web"
 	"github.com/amir20/dozzle/types"
@@ -93,6 +95,14 @@ func main() {
 
 	var hostService web.HostService
 	var notificationService cloud.NotificationService
+	// Swarm replicas sync rules over a proto with no field for the AI flag, so a
+	// peer's rebroadcast would wipe it.
+	var explainer notification.Explainer
+	if args.Mode != "swarm" {
+		explainer = aiExplainer(args)
+	} else if args.AIClaudeAPIKey != "" || args.AIOpenRouterAPIKey != "" {
+		log.Warn().Msg("AI explanations are not supported in swarm mode, so alerts are sent without them")
+	}
 	if args.Mode == "server" {
 		multiHostService := cli.CreateMultiHostService(certs, args)
 		if multiHostService.TotalClients() == 0 {
@@ -100,7 +110,7 @@ func main() {
 		} else {
 			log.Info().Int("clients", multiHostService.TotalClients()).Msg("Connected to Docker")
 		}
-		if err := multiHostService.StartNotificationManager(ctx); err != nil {
+		if err := multiHostService.StartNotificationManager(ctx, explainer); err != nil {
 			log.Fatal().Err(err).Msg("Could not start notification manager")
 		}
 		hostService = multiHostService
@@ -121,7 +131,7 @@ func main() {
 		agentManager := hostservice.NewRetriableClientManager(args.EnvAgents, nil, args.Timeout, certs)
 		manager := hostservice.NewSwarmClientManager(localClient, certs, args.Timeout, agentManager, args.Filter)
 		multiHostService := hostservice.NewMultiHostService(manager, args.Timeout)
-		if err := multiHostService.StartNotificationManager(ctx); err != nil {
+		if err := multiHostService.StartNotificationManager(ctx, nil); err != nil {
 			log.Fatal().Err(err).Msg("Could not start notification manager")
 		}
 		hostService = multiHostService
@@ -155,7 +165,7 @@ func main() {
 			log.Fatal().Err(err).Msg("Could not create k8s cluster service")
 		}
 
-		if err := clusterService.StartNotificationManager(ctx); err != nil {
+		if err := clusterService.StartNotificationManager(ctx, explainer); err != nil {
 			log.Fatal().Err(err).Msg("Could not start notification manager")
 		}
 
@@ -205,7 +215,7 @@ func main() {
 		cloudClient.Notify()
 	}
 
-	srv := createServer(args, hostService, web.CloudHooks{
+	srv := createServer(args, hostService, explainer != nil, web.CloudHooks{
 		OnSetup:    cloudClient.Notify,
 		OnUpdate:   cloudClient.Reconnect,
 		SearchLogs: cloudClient.SearchLogs,
@@ -375,7 +385,23 @@ func fileExists(filename string) bool {
 	return err == nil
 }
 
-func createServer(args cli.Args, hostService web.HostService, cloudHooks web.CloudHooks) *web.Server {
+// aiExplainer returns nil when no AI key is set. It returns the interface, not
+// *ai.Explainer, so that "off" is a nil interface rather than a typed nil.
+func aiExplainer(args cli.Args) notification.Explainer {
+	explainer := ai.New(ai.Config{
+		ClaudeAPIKey:     args.AIClaudeAPIKey,
+		ClaudeModel:      args.AIClaudeModel,
+		OpenRouterAPIKey: args.AIOpenRouterAPIKey,
+		OpenRouterModel:  args.AIOpenRouterModel,
+	})
+	if explainer == nil {
+		return nil
+	}
+	log.Info().Bool("claude", args.AIClaudeAPIKey != "").Bool("openrouter", args.AIOpenRouterAPIKey != "").Msg("AI explanations are on for the alerts that ask for them")
+	return explainer
+}
+
+func createServer(args cli.Args, hostService web.HostService, aiEnabled bool, cloudHooks web.CloudHooks) *web.Server {
 	_, dev := os.LookupEnv("DEV")
 
 	var releaseCheckMode web.ReleaseCheckMode = web.Automatic
@@ -472,6 +498,7 @@ func createServer(args cli.Args, hostService web.HostService, cloudHooks web.Clo
 		EnableActions:      args.EnableActions,
 		EnableShell:        args.EnableShell,
 		EnableMCP:          args.EnableMCP,
+		AIEnabled:          aiEnabled,
 		DisableAvatars:     args.DisableAvatars,
 		DisableSetupWizard: args.DisableSetupWizard,
 		ReleaseCheckMode:   releaseCheckMode,

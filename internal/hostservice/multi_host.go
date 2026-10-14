@@ -364,13 +364,15 @@ func (m *MultiHostService) TotalClients() int {
 	return len(m.manager.List())
 }
 
-// StartNotificationManager initializes and starts the notification manager
-func (m *MultiHostService) StartNotificationManager(ctx context.Context) error {
+// StartNotificationManager initializes and starts the notification manager.
+// explainer is nil when AI explanations are off.
+func (m *MultiHostService) StartNotificationManager(ctx context.Context, explainer notification.Explainer) error {
 	clients := m.manager.LocalClientServices()
 	listener := notification.NewContainerLogListener(ctx, clients)
 	statsListener := notification.NewContainerStatsListener(ctx, clients)
 	eventListener := notification.NewContainerEventListener(ctx, clients)
 	m.notificationManager = notification.NewManager(listener, statsListener, eventListener)
+	m.notificationManager.SetExplainer(explainer)
 	m.persister = &notification.Persister{
 		Manager:          m.notificationManager,
 		NotificationPath: notification.DefaultNotificationConfigPath,

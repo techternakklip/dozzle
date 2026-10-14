@@ -1,6 +1,6 @@
 ---
 title: Alarme
-sourceHash: 5e7e00f70c1f
+sourceHash: c346dd092670
 ---
 
 # Alarme
@@ -186,6 +186,18 @@ Log:       message matches "(?i)(unauthorized|forbidden|invalid token)"
 
 > [!NOTE]
 > Der Alarm-Editor bietet Autovervollständigung und prüft die Eingabe direkt. Du kannst vor dem Speichern eine Vorschau der passenden Container und Logs sehen.
+
+### Mit KI erklären {#explain-with-ai}
+
+Ist ein KI-Schlüssel gesetzt (siehe [Umgebungsvariablen](/de/guide/supported-env-vars#ai-explanations)), kann ein Log-Alarm seine Fehler erklären. Aktiviere dafür **Mit KI erklären** in der Regel.
+
+- Treffer werden 10 Sekunden lang gesammelt und als eine Benachrichtigung pro Container verschickt, höchstens alle 5 Minuten. Treffer, die in dieser Wartezeit eintreffen, gehen mit der nächsten raus, es geht also keiner verloren.
+- `.Detail` beginnt mit der wahrscheinlichen Ursache und dem, was zu prüfen ist, nennt dann die Zahl der passenden Zeilen und zitiert die drei häufigsten. Slack-, Discord- und ntfy-Vorlagen zeigen das unverändert an.
+- Das Modell liest die passenden Zeilen und bis zu 20 Zeilen vor und 10 nach dem ersten Treffer, höchstens 8 KB. Geheimnisse, URL-Query-Strings, E-Mail-Adressen, lange Zahlen und SQL-Werte werden vorher maskiert, und in der Kopie für das Modell auch IDs und IP-Adressen. Die Maskierung kennt nur diese Muster, also prüfe mit `--level debug`, was gesendet wird, bevor du es für Produktions-Logs aktivierst.
+- Zuerst wird Claude gefragt, dann OpenRouter, falls Claude scheitert. Kann das Modell keine Ursache erkennen oder scheitern beide, geht der Alarm ohne Erklärung raus.
+- Derselbe Fehler aus demselben Image innerhalb von 6 Stunden nutzt die frühere Erklärung erneut, und pro Stunde entstehen höchstens 60 Erklärungen. Jeder Modellaufruf protokolliert seine Token-Zahlen.
+
+Alarme von [Agents](/de/guide/agent) und im [Swarm-Modus](/de/guide/swarm-mode) werden nicht erklärt, ebenso wenig Regeln, die an Dozzle Cloud gehen. Sie werden wie bisher verschickt.
 
 ## <Icon icon="mdi:chart-line" inline /> Metrik-Alarme
 

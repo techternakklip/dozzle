@@ -72,22 +72,20 @@ func (m *Manager) processLogEvent(logEvent *container.LogEvent) {
 
 		log.Debug().Str("containerID", notificationContainer.ID).Interface("log", notificationLog.Message).Msg("Matched subscription")
 
+		if m.groupsForAI(sub) {
+			m.recordAIMatch(sub.ID, notificationContainer, notificationLog, logEvent)
+			return true
+		}
+
 		// Create notification
 		notification := types.Notification{
-			ID:        fmt.Sprintf("%s-%d", c.ID, time.Now().UnixNano()),
-			Type:      types.LogNotification,
-			Detail:    formatLogMessage(notificationLog.Message),
-			Container: notificationContainer,
-			Log:       &notificationLog,
-			Subscription: types.SubscriptionConfig{
-				ID:                  sub.ID,
-				Name:                sub.Name,
-				Enabled:             sub.Enabled,
-				DispatcherID:        sub.DispatcherID,
-				LogExpression:       sub.LogExpression,
-				ContainerExpression: sub.ContainerExpression,
-			},
-			Timestamp: time.Now(),
+			ID:           fmt.Sprintf("%s-%d", c.ID, time.Now().UnixNano()),
+			Type:         types.LogNotification,
+			Detail:       formatLogMessage(notificationLog.Message),
+			Container:    notificationContainer,
+			Log:          &notificationLog,
+			Subscription: logSubscriptionConfig(sub),
+			Timestamp:    time.Now(),
 		}
 
 		// Send to the subscription's dispatcher
@@ -313,6 +311,17 @@ func describeExitCode(exitCode string) string {
 		return exitCode + ", " + signal
 	}
 	return exitCode
+}
+
+func logSubscriptionConfig(sub *Subscription) types.SubscriptionConfig {
+	return types.SubscriptionConfig{
+		ID:                  sub.ID,
+		Name:                sub.Name,
+		Enabled:             sub.Enabled,
+		DispatcherID:        sub.DispatcherID,
+		LogExpression:       sub.LogExpression,
+		ContainerExpression: sub.ContainerExpression,
+	}
 }
 
 func formatLogMessage(message any) string {

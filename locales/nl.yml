@@ -538,6 +538,8 @@ notifications:
     log-scan-note: "Het voorbeeld doorzocht de eerste overeenkomende container. | Het voorbeeld doorzocht de eerste {count} overeenkomende containers."
     preview-needs-containers: Kies eerst containers om een voorbeeld met echte data te zien.
     preview-fix-expression: Corrigeer de expressie om een voorbeeld te zien.
+    ai-summary: Uitleggen met AI
+    ai-summary-hint: Bundelt treffers tot één waarschuwing per container, hooguit elke 5 minuten, met de waarschijnlijke oorzaak bovenaan. Gevoelige gegevens in de gevonden regels en de regels eromheen worden gemaskeerd voordat ze naar de AI-provider gaan.
     destination: Bestemming
     no-destinations: Nog geen bestemmingen geconfigureerd.
     preview: Voorbeeld

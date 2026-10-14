@@ -60,6 +60,7 @@ type Config struct {
 	EnableActions      bool
 	EnableShell        bool
 	EnableMCP          bool
+	AIEnabled          bool // an AI key is set, so log alerts can ask for explanations
 	DisableAvatars     bool
 	DisableSetupWizard bool
 	ReleaseCheckMode   ReleaseCheckMode

@@ -88,6 +88,9 @@ type SubscriptionConfig struct {
 	EventExpression     string `json:"eventExpression,omitempty"`
 	Cooldown            int    `json:"cooldown,omitempty"`
 	SampleWindow        int    `json:"sampleWindow,omitempty"`
+	// AISummary stays out of webhook payloads. Agents never receive it: the
+	// proto has no field for it, so their rules always send plain.
+	AISummary bool `json:"-"`
 }
 
 // SubscriptionStats represents runtime stats for a notification subscription

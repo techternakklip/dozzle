@@ -1,6 +1,6 @@
 ---
 title: Alertes
-sourceHash: 5e7e00f70c1f
+sourceHash: c346dd092670
 ---
 
 # Alertes
@@ -186,6 +186,18 @@ Log:       message matches "(?i)(unauthorized|forbidden|invalid token)"
 
 > [!NOTE]
 > L'éditeur d'alertes propose l'autocomplétion et une validation en temps réel. Vous pouvez prévisualiser les conteneurs et les logs correspondants avant d'enregistrer.
+
+### Expliquer avec l'IA {#explain-with-ai}
+
+Avec une clé d'IA définie (voir les [variables d'environnement](/fr/guide/supported-env-vars#ai-explanations)), une alerte de log peut expliquer ses erreurs. Cochez **Expliquer avec l'IA** sur la règle.
+
+- Les correspondances sont regroupées pendant 10 secondes et envoyées en une seule notification par conteneur, au plus toutes les 5 minutes. Celles qui arrivent pendant cette attente partent avec la suivante, donc aucune n'est perdue.
+- `.Detail` commence par la cause probable et ce qu'il faut vérifier, puis indique combien de lignes correspondent et cite les trois plus fréquentes. Les modèles Slack, Discord et ntfy l'affichent sans modification.
+- Le modèle lit les lignes correspondantes et jusqu'à 20 lignes avant et 10 après la première correspondance, 8 Ko au maximum. Les secrets, les chaînes de requête des URL, les e-mails, les longs nombres et les valeurs SQL sont masqués avant l'envoi, et la copie destinée au modèle masque aussi les identifiants et les adresses IP. Le masquage ne connaît que ces motifs : vérifiez ce qui est envoyé avec `--level debug` avant de l'activer pour les logs de production.
+- Claude est interrogé en premier, puis OpenRouter si Claude échoue. Si le modèle ne trouve pas de cause, ou si les deux échouent, l'alerte part sans explication.
+- La même erreur venant de la même image dans les 6 heures réutilise l'explication précédente, et 60 explications au plus sont produites par heure. Chaque appel au modèle journalise son nombre de tokens.
+
+Les alertes des [agents](/fr/guide/agent) et du [mode Swarm](/fr/guide/swarm-mode) ne sont pas expliquées, pas plus que les règles envoyées à Dozzle Cloud. Elles sont envoyées comme avant.
 
 ## <Icon icon="mdi:chart-line" inline /> Alertes de métriques
 

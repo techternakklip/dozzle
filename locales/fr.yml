@@ -537,6 +537,8 @@ notifications:
     log-scan-note: "L'aperçu a parcouru le premier conteneur correspondant. | L'aperçu a parcouru les {count} premiers conteneurs correspondants."
     preview-needs-containers: Choisissez d'abord des conteneurs pour un aperçu sur des données réelles.
     preview-fix-expression: Corrigez l'expression pour voir un aperçu.
+    ai-summary: Expliquer avec l'IA
+    ai-summary-hint: Regroupe les correspondances en une seule alerte par conteneur, au plus toutes les 5 minutes, avec la cause probable en tête. Les données sensibles des lignes correspondantes et des lignes voisines sont masquées avant l'envoi au fournisseur d'IA.
     destination: Destination
     no-destinations: Aucune destination configurée pour le moment.
     preview: Aperçu

@@ -21,14 +21,17 @@ func fileBackedSecrets(args *Args) map[string]*string {
 	return map[string]*string{
 		"DOZZLE_AUTH_GITHUB_CLIENT_SECRET": &args.AuthGithubClientSecret,
 		"DOZZLE_AUTH_OIDC_CLIENT_SECRET":   &args.AuthOidcClientSecret,
+		"DOZZLE_AI_CLAUDE_API_KEY":         &args.AIClaudeAPIKey,
+		"DOZZLE_AI_OPENROUTER_API_KEY":     &args.AIOpenRouterAPIKey,
 	}
 }
 
 // fileBackedEnvNames is the sorted list of settings that accept a _FILE variant,
 // used to keep ValidateEnvVars from warning about them.
 func fileBackedEnvNames() []string {
-	names := make([]string, 0, 2)
-	for env := range fileBackedSecrets(&Args{}) {
+	secrets := fileBackedSecrets(&Args{})
+	names := make([]string, 0, len(secrets))
+	for env := range secrets {
 		names = append(names, env)
 	}
 	slices.Sort(names)

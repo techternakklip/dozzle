@@ -539,6 +539,8 @@ notifications:
     log-scan-note: "預覽掃描了第 1 個符合的容器。 | 預覽掃描了前 {count} 個符合的容器。"
     preview-needs-containers: 請先選擇容器，才能用真實資料預覽。
     preview-fix-expression: 修正運算式後即可看到預覽。
+    ai-summary: 以 AI 解釋
+    ai-summary-hint: 將符合的行合併為每個容器一則警報，最多每 5 分鐘一次，並把可能原因放在最上方。符合的行及其周圍的行會先遮蔽敏感資料，再傳送給 AI 供應商。
     destination: 目標
     no-destinations: 尚未設定接收目標。
     preview: 預覽
